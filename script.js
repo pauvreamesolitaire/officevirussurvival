@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const tileSize = 32;
+let tileSize = 32;
 const playerSpeed = 2;
 let gameRunning = true;
 
@@ -82,6 +82,11 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'P' || e.key === 'p') {
     placePurifier();
   }
+  
+  if (e.key === ' ' || e.key === 'Spacebar') {
+    // Simuler un clic sur le bouton Pause
+    pauseButton.click();
+  }
 });
 
 document.addEventListener('keyup', (e) => {
@@ -90,7 +95,7 @@ document.addEventListener('keyup', (e) => {
 
 // Fonction de mise à jour du jeu
 function update() {
-  if (!gameRunning) return;
+  if (!gameRunning || isPaused) return;
 
   // Décrémenter le temps restant
   if (frameCount % 60 === 0 && timeRemaining > 0) {
@@ -200,6 +205,16 @@ function update() {
 
 // Fonction de dessin
 function draw() {
+	if (isPaused) {
+		// Afficher un écran de pause
+		ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = '#fff';
+		ctx.font = '30px Arial';
+		ctx.textAlign = 'center';
+		ctx.fillText('Jeu en pause', canvas.width / 2, canvas.height / 2);
+		return;
+	  }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Dessiner les fenêtres
@@ -235,12 +250,12 @@ function draw() {
 let frameCount = 0;
 
 function gameLoop() {
+  if (!gameRunning || isPaused) return;
+
   frameCount++;
   update();
   draw();
-  if (gameRunning) {
-    requestAnimationFrame(gameLoop);
-  }
+  requestAnimationFrame(gameLoop);
 }
 
 // Vérification de collision
@@ -302,6 +317,11 @@ function resetGame() {
   keys = {}; // Ajout pour éviter que le personnage se déplace tout seul
 
   updateHUD();
+  
+  isPaused = false; // Assurer que le jeu n'est pas en pause
+  pauseButton.textContent = 'Pause';
+  disableControls(false);
+
 
   // Redémarrer la boucle du jeu
   gameLoop();
@@ -384,6 +404,131 @@ function drawMaskProtectionEffects() {
   });
 }
 
+let isPaused = false; // Indique si le jeu est en pause
+
+// Récupération des boutons de contrôle tactile
+const upButton = document.getElementById('upButton');
+const downButton = document.getElementById('downButton');
+const leftButton = document.getElementById('leftButton');
+const rightButton = document.getElementById('rightButton');
+const maskButton = document.getElementById('maskButton');
+const purifierButton = document.getElementById('purifierButton');
+const windowButton = document.getElementById('windowButton');
+const pauseButton = document.getElementById('pauseButton');
+
+// Gestion des événements tactiles pour les boutons de déplacement
+upButton.addEventListener('touchstart', () => keys['ArrowUp'] = true);
+upButton.addEventListener('touchend', () => keys['ArrowUp'] = false);
+
+downButton.addEventListener('touchstart', () => keys['ArrowDown'] = true);
+downButton.addEventListener('touchend', () => keys['ArrowDown'] = false);
+
+leftButton.addEventListener('touchstart', () => keys['ArrowLeft'] = true);
+leftButton.addEventListener('touchend', () => keys['ArrowLeft'] = false);
+
+rightButton.addEventListener('touchstart', () => keys['ArrowRight'] = true);
+rightButton.addEventListener('touchend', () => keys['ArrowRight'] = false);
+
+// Gestion des événements tactiles pour les boutons d'action
+maskButton.addEventListener('touchstart', () => {
+  if (player.maskProtections > 0) {
+    player.mask = !player.mask;
+  } else {
+    alert('Votre masque FFP2 n\'a plus de protections !');
+    player.mask = false;
+  }
+  updateHUD();
+});
+
+purifierButton.addEventListener('touchstart', () => {
+  placePurifier();
+});
+
+windowButton.addEventListener('touchstart', () => {
+  windows.isOpen = !windows.isOpen;
+  updateHUD();
+});
+
+pauseButton.addEventListener('click', () => {
+  isPaused = !isPaused;
+  if (isPaused) {
+    pauseButton.textContent = 'Reprendre';
+    // Désactiver les contrôles pendant la pause
+    disableControls(true);
+  } else {
+    pauseButton.textContent = 'Pause';
+    // Réactiver les contrôles
+    disableControls(false);
+    // Reprendre le jeu
+    gameLoop();
+  }
+});
+
+// Fonction pour désactiver ou activer les contrôles
+function disableControls(disable) {
+  upButton.disabled = disable;
+  downButton.disabled = disable;
+  leftButton.disabled = disable;
+  rightButton.disabled = disable;
+  maskButton.disabled = disable;
+  purifierButton.disabled = disable;
+  windowButton.disabled = disable;
+}
+
+// Fonction pour ajuster la taille du canvas en fonction de la taille de la fenêtre
+function resizeCanvas() {
+  const aspectRatio = 1; // Ratio d'aspect carré
+  let width = window.innerWidth;
+  let height = window.innerHeight - 200; // Ajustement pour laisser de la place pour le HUD et les boutons
+
+  if (width / height > aspectRatio) {
+    width = height * aspectRatio;
+  } else {
+    height = width / aspectRatio;
+  }
+
+  canvas.width = width;
+  canvas.height = height;
+
+  // Recalculer tileSize en fonction de la nouvelle largeur du canvas
+  tileSize = canvas.width / 25;
+
+  // Repositionner les éléments du jeu
+  player.width = tileSize;
+  player.height = tileSize;
+  player.x = canvas.width / 2 - player.width / 2;
+  player.y = canvas.height - player.height * 2;
+
+  windows.width = tileSize * 4;
+  windows.height = tileSize * 4;
+  windows.x = (canvas.width - windows.width) / 2;
+  windows.y = (canvas.height - windows.height) / 2;
+
+  // Redimensionner les virus et les purificateurs si nécessaire
+  viruses.forEach(virus => {
+    virus.width = tileSize / 2;
+    virus.height = tileSize / 2;
+  });
+
+  purifiers.forEach(purifier => {
+    purifier.width = tileSize;
+    purifier.height = tileSize;
+  });
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+// Appeler resizeCanvas au démarrage pour ajuster la taille initiale
+resizeCanvas();
+
+if (isPaused) {
+  pauseButton.textContent = 'Reprendre';
+} else {
+  pauseButton.textContent = 'Pause';
+}
+
+
+
 // Démarrage du jeu après le chargement des images
 let imagesLoaded = 0;
 [playerImg, playerMaskImg, virusImg, purifierImg, windowClosedImg, windowOpenImg].forEach(
@@ -396,3 +541,4 @@ let imagesLoaded = 0;
     };
   }
 );
+
