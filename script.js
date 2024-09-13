@@ -477,21 +477,21 @@ function disableControls(disable) {
 
 // Fonction pour ajuster la taille du canvas en fonction de la taille de la fenêtre
 function resizeCanvas() {
-  const aspectRatio = 1; // Ratio d'aspect carré
   let width = window.innerWidth;
-  let height = window.innerHeight - 200; // Ajustement pour laisser de la place pour le HUD et les boutons
+  let height = window.innerHeight;
 
-  if (width / height > aspectRatio) {
-    width = height * aspectRatio;
-  } else {
-    height = width / aspectRatio;
-  }
+  // Définir la taille maximale du canvas
+  const maxCanvasSize = 600; // Vous pouvez ajuster cette valeur
+  const canvasSize = Math.min(width, height) - 150; // Laisser de l'espace pour le HUD et les contrôles
 
-  canvas.width = width;
-  canvas.height = height;
+  // Taille finale du canvas
+  const finalCanvasSize = Math.min(canvasSize, maxCanvasSize);
+
+  canvas.width = finalCanvasSize;
+  canvas.height = finalCanvasSize;
 
   // Recalculer tileSize en fonction de la nouvelle largeur du canvas
-  tileSize = canvas.width / 25;
+  tileSize = canvas.width / 15; // Diviseur réduit pour agrandir les sprites
 
   // Repositionner les éléments du jeu
   player.width = tileSize;
@@ -504,17 +504,20 @@ function resizeCanvas() {
   windows.x = (canvas.width - windows.width) / 2;
   windows.y = (canvas.height - windows.height) / 2;
 
-  // Redimensionner les virus et les purificateurs si nécessaire
+  // Redimensionner les virus
   viruses.forEach(virus => {
-    virus.width = tileSize / 2;
-    virus.height = tileSize / 2;
+    virus.width = tileSize * 0.8; // Utiliser une fraction plus grande pour agrandir les virus
+    virus.height = tileSize * 0.8;
   });
 
+  // Redimensionner les purificateurs
   purifiers.forEach(purifier => {
     purifier.width = tileSize;
     purifier.height = tileSize;
   });
 }
+
+
 
 window.addEventListener('resize', resizeCanvas);
 
