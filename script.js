@@ -477,12 +477,12 @@ function disableControls(disable) {
 
 // Fonction pour ajuster la taille du canvas en fonction de la taille de la fenêtre
 function resizeCanvas() {
-  let width = window.innerWidth;
-  let height = window.innerHeight;
+  let width = window.innerWidth - 40; // Soustraction des marges horizontales (20px de chaque côté)
+  let height = window.innerHeight - 200; // Ajustement pour laisser de l'espace pour le HUD et les contrôles
 
   // Définir la taille maximale du canvas
   const maxCanvasSize = 600; // Vous pouvez ajuster cette valeur
-  const canvasSize = Math.min(width, height) - 150; // Laisser de l'espace pour le HUD et les contrôles
+  const canvasSize = Math.min(width, height);
 
   // Taille finale du canvas
   const finalCanvasSize = Math.min(canvasSize, maxCanvasSize);
@@ -491,7 +491,7 @@ function resizeCanvas() {
   canvas.height = finalCanvasSize;
 
   // Recalculer tileSize en fonction de la nouvelle largeur du canvas
-  tileSize = canvas.width / 15; // Diviseur réduit pour agrandir les sprites
+  tileSize = canvas.width / 15; // Diviseur ajusté pour les sprites
 
   // Repositionner les éléments du jeu
   player.width = tileSize;
@@ -506,7 +506,7 @@ function resizeCanvas() {
 
   // Redimensionner les virus
   viruses.forEach(virus => {
-    virus.width = tileSize * 0.8; // Utiliser une fraction plus grande pour agrandir les virus
+    virus.width = tileSize * 0.8;
     virus.height = tileSize * 0.8;
   });
 
@@ -516,6 +516,7 @@ function resizeCanvas() {
     purifier.height = tileSize;
   });
 }
+
 
 
 

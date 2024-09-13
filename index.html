@@ -9,6 +9,17 @@
 <body>
   <h1>Office Virus Survivor</h1>
   <p class="game-description">Survivez sans être infecté à la journée de travail !</p>
+
+  <!-- Déplacer le HUD en haut pour une meilleure visibilité -->
+  <div id="hud">
+    <p>Temps restant : <span id="timeRemaining">08:00</span></p>
+    <p>CO₂ : <span id="co2Level">400</span> ppm</p>
+    <p>Température : <span id="temperature">22</span>°C</p>
+    <p>Virus : <span id="virusCount">0</span></p>
+    <p>Masque FFP2 : <span id="maskStatus">Non</span> (<span id="maskProtections">3</span> protections restantes)</p>
+    <p>Purificateurs restants : <span id="purifierCount">3</span></p>
+  </div>
+
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
   </div>
@@ -30,14 +41,7 @@
       </div>
     </div>
   </div>
-  <div id="hud">
-    <p>Temps restant : <span id="timeRemaining">08:00</span></p>
-    <p>CO₂ : <span id="co2Level">400</span> ppm</p>
-    <p>Température : <span id="temperature">22</span>°C</p>
-    <p>Virus : <span id="virusCount">0</span></p>
-    <p>Masque FFP2 : <span id="maskStatus">Non</span> (<span id="maskProtections">3</span> protections restantes)</p>
-    <p>Purificateurs restants : <span id="purifierCount">3</span></p>
-  </div>
+
   <!-- Ajout de la description des commandes clavier -->
   <div id="keyboardCommands">
     <p>Commandes clavier : Flèches - Déplacement | M - Masque | P - Purificateur | O - Fenêtres | Espace - Pause</p>

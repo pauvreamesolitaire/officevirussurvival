@@ -2,7 +2,7 @@ body {
   margin: 0;
   background-color: #000;
   color: #fff;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Arial', sans-serif; /* Changement de la police */
   text-align: center;
 }
 
@@ -19,8 +19,8 @@ h1 {
 #gameContainer {
   position: relative;
   width: 100%;
-  max-width: 600px; /* Taille maximale du canvas */
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 20px auto; /* Ajout de marges pour centrer le jeu et éviter qu'il dépasse l'écran */
 }
 
 #gameCanvas {
@@ -31,38 +31,6 @@ h1 {
   border: 4px solid #fff;
 }
 
-/* Ajuster les boutons pour les petits écrans */
-#touchControls button {
-  padding: 5px;
-  margin: 3px;
-  font-size: 14px;
-}
-
-#hud p {
-  font-size: 10px;
-}
-
-@media only screen and (max-width: 480px) {
-  h1 {
-    font-size: 18px;
-  }
-
-  .game-description {
-    font-size: 12px;
-  }
-
-  #hud p {
-    font-size: 8px;
-  }
-
-  #touchControls button {
-    padding: 4px;
-    margin: 2px;
-    font-size: 12px;
-  }
-}
-
-
 #hud {
   text-align: center;
   margin-top: 10px;
@@ -70,13 +38,12 @@ h1 {
 
 #hud p {
   margin: 5px;
-  font-size: 12px;
+  font-size: 14px; /* Augmentation de la taille de police pour une meilleure lisibilité */
 }
 
-/* Styles pour la description des commandes clavier */
 #keyboardCommands {
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 14px; /* Ajustement de la taille de police */
 }
 
 /* Styles pour les contrôles tactiles */
@@ -84,7 +51,7 @@ h1 {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin: 20px auto; /* Ajout de marges pour centrer les contrôles */
 }
 
 #touchControls {
@@ -119,4 +86,29 @@ h1 {
 
 .middleButtons button {
   margin: 0 5px;
+}
+
+/* Ajustements pour les petits écrans */
+@media only screen and (max-width: 480px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  .game-description {
+    font-size: 12px;
+  }
+
+  #hud p {
+    font-size: 12px;
+  }
+
+  #keyboardCommands {
+    font-size: 12px;
+  }
+
+  #touchControls button {
+    padding: 8px;
+    margin: 4px;
+    font-size: 14px;
+  }
 }
