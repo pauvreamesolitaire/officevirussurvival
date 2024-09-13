@@ -1,8 +1,12 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+
+// Détection de l'appareil mobile
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 let tileSize = 32;
-const playerSpeed = 2;
+let playerSpeed = 2;
 let gameRunning = true;
 
 // Chargement des images
@@ -121,19 +125,26 @@ function update() {
   player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
   player.y = Math.max(0, Math.min(player.y, canvas.height - player.height));
 
-  // Générer des virus aléatoirement avec un taux ajusté
-  if (Math.random() < 0.01) { // Réduction du taux de génération
+  // Déterminer le taux de génération des virus en fonction de l'appareil
+  const virusGenerationRate = isMobile ? 0.005 : 0.01;
+
+  // Générer des virus aléatoirement
+  if (Math.random() < virusGenerationRate) {
     createVirus();
   }
 
   // Vérifier les collisions avec les virus
   viruses.forEach((virus, index) => {
-    // Déplacer les virus légèrement vers le joueur
+    // Déplacer les virus vers le joueur
     let dx = player.x - virus.x;
     let dy = player.y - virus.y;
     let distance = Math.hypot(dx, dy);
-    virus.x += (dx / distance) * 0.5; // Réduction de la vitesse des virus
-    virus.y += (dy / distance) * 0.5;
+
+    // Déterminer la vitesse des virus en fonction de l'appareil
+    const virusSpeed = isMobile ? 0.3 : 0.5;
+
+    virus.x += (dx / distance) * virusSpeed;
+    virus.y += (dy / distance) * virusSpeed;
 
     if (isColliding(player, virus)) {
       if (player.mask && player.maskProtections > 0) {
@@ -475,6 +486,11 @@ function disableControls(disable) {
   windowButton.disabled = disable;
 }
 
+// Ajuster la vitesse du joueur en fonction de l'appareil
+function adjustPlayerSpeed() {
+  playerSpeed = isMobile ? tileSize / 10 : 2;
+}
+
 // Fonction pour ajuster la taille du canvas en fonction de la taille de la fenêtre
 function resizeCanvas() {
   let width = window.innerWidth - 40; // Soustraction des marges horizontales (20px de chaque côté)
@@ -492,6 +508,9 @@ function resizeCanvas() {
 
   // Recalculer tileSize en fonction de la nouvelle largeur du canvas
   tileSize = canvas.width / 15; // Diviseur ajusté pour les sprites
+  
+  // Ajuster la vitesse du joueur
+  adjustPlayerSpeed();
 
   // Repositionner les éléments du jeu
   player.width = tileSize;
