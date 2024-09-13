@@ -427,18 +427,57 @@ const purifierButton = document.getElementById('purifierButton');
 const windowButton = document.getElementById('windowButton');
 const pauseButton = document.getElementById('pauseButton');
 
-// Gestion des événements tactiles pour les boutons de déplacement
-upButton.addEventListener('touchstart', () => keys['ArrowUp'] = true);
-upButton.addEventListener('touchend', () => keys['ArrowUp'] = false);
+// Gestion des événements pour le bouton Haut
+upButton.addEventListener('mousedown', () => keys['ArrowUp'] = true);
+upButton.addEventListener('mouseup', () => keys['ArrowUp'] = false);
+upButton.addEventListener('mouseleave', () => keys['ArrowUp'] = false);
+upButton.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  keys['ArrowUp'] = true;
+});
+upButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  keys['ArrowUp'] = false;
+});
 
-downButton.addEventListener('touchstart', () => keys['ArrowDown'] = true);
-downButton.addEventListener('touchend', () => keys['ArrowDown'] = false);
+// Gestion des événements pour le bouton Bas
+downButton.addEventListener('mousedown', () => keys['ArrowDown'] = true);
+downButton.addEventListener('mouseup', () => keys['ArrowDown'] = false);
+downButton.addEventListener('mouseleave', () => keys['ArrowDown'] = false);
+downButton.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  keys['ArrowDown'] = true;
+});
+downButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  keys['ArrowDown'] = false;
+});
 
-leftButton.addEventListener('touchstart', () => keys['ArrowLeft'] = true);
-leftButton.addEventListener('touchend', () => keys['ArrowLeft'] = false);
+// Gestion des événements pour le bouton Gauche
+leftButton.addEventListener('mousedown', () => keys['ArrowLeft'] = true);
+leftButton.addEventListener('mouseup', () => keys['ArrowLeft'] = false);
+leftButton.addEventListener('mouseleave', () => keys['ArrowLeft'] = false);
+leftButton.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  keys['ArrowLeft'] = true;
+});
+leftButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  keys['ArrowLeft'] = false;
+});
 
-rightButton.addEventListener('touchstart', () => keys['ArrowRight'] = true);
-rightButton.addEventListener('touchend', () => keys['ArrowRight'] = false);
+// Gestion des événements pour le bouton Droit
+rightButton.addEventListener('mousedown', () => keys['ArrowRight'] = true);
+rightButton.addEventListener('mouseup', () => keys['ArrowRight'] = false);
+rightButton.addEventListener('mouseleave', () => keys['ArrowRight'] = false);
+rightButton.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  keys['ArrowRight'] = true;
+});
+rightButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  keys['ArrowRight'] = false;
+});
 
 // Gestion des événements tactiles pour les boutons d'action
 maskButton.addEventListener('touchstart', () => {
@@ -464,13 +503,10 @@ pauseButton.addEventListener('click', () => {
   isPaused = !isPaused;
   if (isPaused) {
     pauseButton.textContent = 'Reprendre';
-    // Désactiver les contrôles pendant la pause
     disableControls(true);
   } else {
     pauseButton.textContent = 'Pause';
-    // Réactiver les contrôles
     disableControls(false);
-    // Reprendre le jeu
     gameLoop();
   }
 });
