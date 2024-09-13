@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Office Virus Survivor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Office Virus Survivor</h1>
+  <p class="game-description">Survivez sans être infecté à la journée de travail !</p>
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+  </div>
+  <div id="hud">
+    <p>Temps restant : <span id="timeRemaining">08:00</span></p>
+    <p>CO₂ : <span id="co2Level">400</span> ppm</p>
+    <p>Température : <span id="temperature">22</span>°C</p>
+    <p>Virus : <span id="virusCount">0</span></p>
+    <p>Masque FFP2 : <span id="maskStatus">Non</span> (<span id="maskProtections">3</span> protections restantes)</p>
+    <p>Purificateurs restants : <span id="purifierCount">3</span></p>
+    <p>Commandes : Flèches - Déplacement | P - Purificateur | M - Masque | O - Fenêtres</p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
